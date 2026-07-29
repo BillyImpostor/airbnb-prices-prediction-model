@@ -6,12 +6,6 @@ Catatan: y yang di-fit (y_tr) adalah log1p(price). Scorer di sini
 menghitung MAPE, jadi best_score_ sebanding dengan MAPE yang dilaporkan
 di bagian lain notebook (bukan MAPE di skala log1p).
 
-Cara pakai di notebook:
-    from tuning import get_tuning_params, create_tuner
-    param_dist = get_tuning_params()
-    tuner = create_tuner(X_tr, y_tr)
-    print(f"Best params: {tuner.best_params_}")
-    print(f"Best MAPE: {-tuner.best_score_:.4f}")
 """
 
 from sklearn.model_selection import RandomizedSearchCV
@@ -22,10 +16,10 @@ import xgboost as xgb
 
 def _mape_on_price_scale(y_true_log, y_pred_log):
     """
-    FIX BUG: y yang dipakai untuk fit (X_tr, y_tr) adalah log1p(price),
+    FIX: y yang dipakai untuk fit (X_tr, y_tr) adalah log1p(price),
     bukan price asli. Scorer bawaan 'neg_mean_absolute_percentage_error'
     menghitung MAPE langsung di skala log1p tersebut, sehingga angka yang
-    dilaporkan (mis. ~5.5%) jauh lebih kecil dari MAPE harga sebenarnya
+    dilaporkan jauh lebih kecil dari MAPE harga sebenarnya
     (yang di validation set model lain berada di kisaran 37-47%).
     Fungsi ini meng-inverse dulu (expm1) sebelum menghitung MAPE, supaya
     hasilnya sebanding dengan MAPE yang dilaporkan di bagian lain notebook.
